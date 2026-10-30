@@ -668,7 +668,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-icon { padding: 0.5rem; }
 
 /* Card */
-.card { background: #fff; border: 1px solid #e3e5ea; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); }
+/* min-width: 0 voorkomt dat een kaart binnen een flex/grid-kolom breder wordt
+   gerekt dan die kolom, puur om bredere inhoud (zoals een tabel) te laten
+   passen — de scrollbare .table-wrap daarbinnen moet dat zelf opvangen.
+   Zonder dit duwde bijv. de prijslijst-tabel in Instellingen de hele pagina
+   breder dan het mobiele scherm (bug gevonden tijdens de QA-sweep). */
+.card { background: #fff; border: 1px solid #e3e5ea; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); min-width: 0; }
 .card-hover { transition: box-shadow 150ms ease, transform 150ms ease; }
 .card-hover:hover { box-shadow: var(--shadow-card); transform: translateY(-1px); }
 
@@ -953,7 +958,11 @@ table.items-table .select { padding-right: 1.3rem; padding-left: 0.5rem; backgro
   .sidebar-desktop { display: none; }
   .topbar { display: flex; }
   .page { padding: 1.25rem 1rem 2.5rem; }
-  .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr; }
+  /* minmax(0, 1fr) i.p.v. kaal 1fr: anders krijgt de ene kolom op mobiel een
+     automatische minimumbreedte op basis van de inhoud (bijv. een brede
+     tabel), waardoor die kolom — en daarmee de hele pagina — breder wordt
+     dan het scherm. Zelfde reden waarom de desktop-grid-cols dit al deden. */
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: minmax(0, 1fr); }
   .stat-card .stat-value { font-size: 1.4rem; }
   .modal { max-width: 100% !important; }
   .modal-footer { flex-wrap: wrap; }
